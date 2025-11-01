@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculatrice NOGAME</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #ff6f20;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      overflow-y: auto;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-direction: column;
+    }
+    .calculator {
+      background-color: #3DDC97;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 360px;
+      margin: 20px auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo { font-size: 20px; font-weight: bold; color: white; margin-bottom: 5px; }
+    h2 { margin: 5px 0; font-size: 16px; color: #FF6F20; }
+    #result {
+      width: 100%; height: 40px; font-size: 18px;
+      text-align: right; padding: 5px; margin-bottom: 10px;
+      border-radius: 5px; border: 1px solid #ccc; background-color: #fff;
+    }
+    .buttons {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 5px; width: 100%;
+    }
+    .buttons button {
+      padding: 8px; font-size: 14px; border: none;
+      border-radius: 5px; background-color: #A7D9B8; cursor: pointer;
+    }
+    .buttons button:active { transform: scale(0.95); }
+    .clear { background-color: #f44336; color: white; }
+    .equal { background-color: #4CAF50; color: white; }
+    .contact-button, .upgrade-button {
+      margin-top: 6px; background-color: #FF6F20; color: white;
+      border: none; padding: 8px; border-radius: 5px;
+      cursor: pointer; width: 100%; font-size: 13px;
+    }
+    #proCodeInput {
+      margin-top: 6px; width: 100%; padding: 6px;
+      border-radius: 5px; border: 1px solid #ccc; font-size: 13px;
+    }
+    @keyframes fadeOut {
+      0% { opacity: 1; } 80% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-20px); }
+    }
+    #ageModal {
+      display: none; position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%; background: rgba(0,0,0,0.6);
+      z-index: 9999; justify-content: center; align-items: center;
+    }
+    #ageModalContent {
+      background: #fff; padding: 20px; border-radius: 10px;
+      width: 90%; max-width: 300px; text-align: center;
+    }
+    #ageModalContent input {
+      width: 100%; padding: 8px; margin-top: 10px;
+    }
+    #ageModalContent button {
+      margin-top: 10px; padding: 8px 15px;
+      border: none; border-radius: 5px; cursor: pointer;
+    }
+    #ageModalContent .verify { background: #4CAF50; color: white; }
+    #ageModalContent .close { background: #f44336; color: white; }
+  </style>
+</head>
+<body>
+
+<div class="calculator">
+  <div class="logo">🔷 NOGAME</div>
+  <h2 id="calcTitle">CALCULATRICE GRATUITE</h2>
+  <input type="text" id="result" disabled>
+  <div class="buttons">
+    <script type="text/javascript"> 	atOptions = { 		'key' : 'd5db256a447eaa5ed696ea1afeeb3776', 		'format' : 'iframe', 		'height' : 50, 		'width' : 320, 		'params' : {} 	}; </script> <script type="text/javascript" src="//www.highperformanceformat.com/d5db256a447eaa5ed696ea1afeeb3776/invoke.js"></script>
+    <button onclick="clearResult()" class="clear">C</button>
+    <button onclick="deleteLast()">⌫</button>
+    <button onclick="toggleSign()">±</button>
+    <button onclick="append('%')">%</button>
+    <button onclick="append('/')">/</button>
+    <button onclick="append('×')">×</button>
+    <button onclick="append('7')">7</button>
+    <button onclick="append('8')">8</button>
+    <button onclick="append('9')">9</button>
+    <button onclick="append('-')">-</button>
+    <button onclick="append('4')">4</button>
+    <button onclick="append('5')">5</button>
+    <button onclick="append('6')">6</button>
+    <button onclick="append('+')">+</button>
+    <button onclick="append('1')">1</button>
+    <button onclick="append('2')">2</button>
+    <button onclick="append('3')">3</button>
+    <button onclick="calculate()" class="equal">=</button>
+    <button onclick="append('0')">0</button>
+    <button onclick="append('.')">.</button>
+    <button onclick="calculateScientific('sqrt')">√</button>
+    <button onclick="calculateScientific('square')">x²</button>
+    <button onclick="calculateScientific('sin')">sin</button>
+    <button onclick="calculateScientific('cos')">cos</button>
+    <button onclick="calculateScientific('tan')">tan</button>
+    <button onclick="calculateScientific('log')">log</button>
+    <button onclick="calculateScientific('ln')">ln</button>
+    <button onclick="calculateScientific('pi')">π</button>
+    <button onclick="calculateScientific('e')">e</button>
+  </div>
+
+  <input type="text" id="proCodeInput" placeholder="Entrez le code PRO">
+  <button onclick="verifyProCode()" class="upgrade-button">ACTIVER / DÉSACTIVER PRO</button>
+  <button class="contact-button" onclick="contactWhatsApp()">CONTACTER NOGAME</button>
+  <button class="contact-button" onclick="openAgeModal()">Contrôler ma date de naissance</button>
+</div>
+
+<!-- Bann Piblisite Adsterra -->
+<div style="margin: 20px auto; text-align: center;">
+  <script type="text/javascript">
+    atOptions = {
+      'key' : 'd5db256a447eaa5ed696ea1afeeb3776',
+      'format' : 'iframe',
+      'height' : 50,
+      'width' : 320,
+      'params' : {}
+    };
+  </script>
+  <script type="text/javascript" src="//www.highperformanceformat.com/d5db256a447eaa5ed696ea1afeeb3776/invoke.js"></script>
+</div>
+
+<div id="ageModal">
+  <div id="ageModalContent">
+    <h3>Contrôle d'âge</h3>
+    <input type="text" id="birthDate" placeholder="Ex: 2005-08-15">
+    <button onclick="checkAge()" class="verify">Vérifier</button>
+    <button onclick="closeAgeModal()" class="close">Fermer</button>
+    <p id="ageResult"></p>
+  </div>
+</div>
+
+<script>
+  let isPro = false;
+
+  function showAd() {
+    if (!isPro) {
+      const adBox = document.createElement("div");
+      adBox.textContent = "📢 Publicité NOGAME : Merci de soutenir l'application !";
+      Object.assign(adBox.style, {
+        position: "fixed", bottom: "20px", left: "50%", transform: "translateX(-50%)",
+        background: "#FF6F20", color: "white", padding: "10px 20px",
+        borderRadius: "8px", boxShadow: "0 0 10px rgba(0,0,0,0.3)",
+        animation: "fadeOut 3s forwards", zIndex: 9999
+      });
+      document.body.appendChild(adBox);
+      setTimeout(() => adBox.remove(), 3000);
+    }
+  }
+
+  function showStars() {
+    const star = document.createElement("div");
+    star.textContent = "✨ PRO ACTIVÉ ! ✨";
+    Object.assign(star.style, {
+      position: "fixed", top: "20px", left: "50%", transform: "translateX(-50%)",
+      background: "#4CAF50", color: "white", padding: "10px 20px",
+      borderRadius: "8px", boxShadow: "0 0 10px rgba(0,0,0,0.3)",
+      animation: "fadeOut 3s forwards", zIndex: 9999
+    });
+    document.body.appendChild(star);
+    setTimeout(() => star.remove(), 3000);
+  }
+
+  function append(value) {
+    if (value === '×') value = '*';
+    document.getElementById("result").value += value;
+  }
+
+  function clearResult() {
+    showAd();
+    document.getElementById("result").value = "";
+  }
+
+  function deleteLast() {
+    const val = document.getElementById("result").value;
+    document.getElementById("result").value = val.slice(0, -1);
+  }
+
+  function toggleSign() {
+    showAd();
+    const val = document.getElementById("result").value;
+    if (val) {
+      document.getElementById("result").value = val.startsWith('-') ? val.slice(1) : '-' + val;
+    }
+  }
+
+  function calculate() {
+    showAd();
+    try {
+      document.getElementById("result").value = eval(document.getElementById("result").value);
+    } catch {
+      document.getElementById("result").value = "Erreur";
+    }
+  }
+
+  function calculateScientific(func) {
+    if (!isPro) {
+      showAd();
+      alert("Fonction PRO ! Contactez NOGAME sur WhatsApp au +50943608217.");
+      return;
+    }
+    let val = parseFloat(document.getElementById("result").value);
+    let result = 0;
+    switch(func) {
+      case 'sqrt': result = Math.sqrt(val); break;
+      case 'square': result = Math.pow(val, 2); break;
+      case 'sin': result = Math.sin(val); break;
+      case 'cos': result = Math.cos(val); break;
+      case 'tan': result = Math.tan(val); break;
+      case 'log': result = Math.log10(val); break;
+      case 'ln': result = Math.log(val); break;
+      case 'pi': result = Math.PI; break;
+      case 'e': result = Math.E; break;
+    }
+    document.getElementById("result").value = result;
+  }
+
+  function verifyProCode() {
+    const code = document.getElementById("proCodeInput").value.trim();
+    const title = document.getElementById("calcTitle");
+    if (code === "NOGAME2025") {
+      isPro = true;
+      title.textContent = "CALCULATRICE PRO";
+      showStars();
+    } else if (code === "DESACTIVE2025") {
+      isPro = false;
+      title.textContent = "CALCULATRICE GRATUITE";
+      alert("La version PRO a été désactivée.");
+    } else {
+      alert("Code invalide. Contactez NOGAME sur WhatsApp au +50943608217.");
+    }
+    document.getElementById("proCodeInput").value = "";
+  }
+
+  function contactWhatsApp() {
+    window.open("https://wa.me/50943608217", "_blank");
+  }
+
+  function openAgeModal() {
+    document.getElementById("ageModal").style.display = "flex";
+    document.getElementById("ageResult").textContent = "";
+    document.getElementById("birthDate").value = "";
+  }
+
+  function closeAgeModal() {
+    document.getElementById("ageModal").style.display = "none";
+  }
+
+  function checkAge() {
+    const input = document.getElementById("birthDate").value.trim();
+    const birthDate = new Date(input);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    const result = document.getElementById("ageResult");
+    if (isNaN(age)) {
+      result.textContent = "Veuillez entrer une date valide (ex: 2005-08-15).";
+      result.style.color = "red";
+    } else if (age >= 15) {
+      result.textContent = "✅ Accès autorisé. Vous avez " + age + " ans.";
+      result.style.color = "green";
+    } else {
+      result.textContent = "❌ Accès refusé. Vous avez " + age + " ans.";
+      result.style.color = "red";
+    }
+  }
+</script>
+</body>
+</html>
